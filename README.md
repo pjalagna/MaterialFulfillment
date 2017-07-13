@@ -138,19 +138,20 @@ Page 10
 
 Page 11
 - buyer responds first
-screen BuyerResponseScreen
+-- screen BuyerResponseScreen
          (
            buyer name, address, email
            contract# { also may be filled by sub screen }
-           ((serviceProviderSubScreen))
+           ((FindServiceProviderSubScreen))
            radio-pair ( "are you satisfied?", Not satisfied )
            hidden BuyerSessionID
          ) On commit
              - function heartBeat () ==> HeartBeatID OR TimePassedError
              - function EmailAckToBuyer('ContractFulfilment')
+             - function EmailToServiceProvider(functionServiceProviderEmailVizContract(contract#),"Buyer responded")
              - function write contractFulfillmentRecord
              
-screen serviceProviderSubScreen 
+-- screen FindServiceProviderSubScreen 
          (
            servive name, address, webURL
            offering date of service
@@ -162,6 +163,19 @@ Page 12
 
 Page 13
 - service responds first
+-- screen ServiceResponseScreen
+         (
+           ServiceProviderName, address, email
+           contract# { also may be filled by sub screen }
+           ((FindBuyerSubScreen))
+           radio-pair ( "are you satisfied?", Not satisfied )
+           hidden BuyerSessionID
+         ) On commit
+             - function heartBeat () ==> HeartBeatID OR TimePassedError
+             - function EmailAckToBuyer('ContractFulfilment')
+             - function EmailToServiceProvider(functionServiceProviderEmailVizContract(contract#),"Buyer responded")
+             - function write contractFulfillmentRecord
+-- - function EmailToBuyerProvider(functionBuyerEmailVizContract(contract#),"Server responded")
 
 Page 14
 - service responds second
